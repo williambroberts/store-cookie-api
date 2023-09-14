@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.logoutController = exports.loginController = exports.registerController = void 0;
+exports.statusController = exports.logoutController = exports.loginController = exports.registerController = void 0;
 const express_async_handler_1 = __importDefault(require("express-async-handler"));
 const Errors_1 = require("../utils/Errors");
 const config_1 = __importDefault(require("../db/config"));
@@ -44,6 +44,9 @@ exports.registerController = (0, express_async_handler_1.default)((req, res) => 
         if (row) {
             res.status(201);
             res.json({ success: true, row: row });
+        }
+        else {
+            throw new Errors_1.InternalServerError("Failed to create user in DB");
         }
     }
     else {
@@ -102,3 +105,8 @@ exports.logoutController = (0, express_async_handler_1.default)((req, res) => __
         });
     }
 }));
+const statusController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    res.status(200);
+    res.json({ success: true, isAuth: true, status: 200 });
+});
+exports.statusController = statusController;

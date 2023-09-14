@@ -15,7 +15,6 @@ const helmet_1 = __importDefault(require("helmet"));
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const errorMiddleware_1 = require("./Middleware/errorMiddleware");
 const body_parser_1 = __importDefault(require("body-parser"));
-const authMiddleware_1 = require("./Middleware/authMiddleware");
 function createApp() {
     const app = (0, express_1.default)();
     const MySQLStore = (0, express_mysql_session_1.default)(SESSION);
@@ -45,7 +44,7 @@ function createApp() {
         store: sessionStore,
         cookie: {
             secure: true,
-            sameSite: 'none',
+            sameSite: 'none'
         }
     }));
     sessionStore.onReady().then(() => {
@@ -86,10 +85,6 @@ function createApp() {
     app.get("/", (req, res) => {
         res.status(200);
         res.json({ success: "true 🕊️", session: req.session, sessionId: req.sessionID });
-    });
-    app.get("/profile", authMiddleware_1.enableAuthenticate, (req, res) => {
-        res.status(200);
-        res.json({ success: "ok through" });
     });
     app.use('*', (req, res) => {
         console.log(req.originalUrl, "*");

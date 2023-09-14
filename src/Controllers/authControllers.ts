@@ -32,6 +32,8 @@ export const registerController = ash(async(req:any,res:Response)=>{
         if (row){
             res.status(201)
             res.json({success:true,row:row})
+        }else {
+            throw new InternalServerError("Failed to create user in DB")
         }
     }else {
         throw new InternalServerError("Failed to hash password")
@@ -97,3 +99,8 @@ export const logoutController = ash(async(req:any,res:Response)=>{
     }
     
 })
+
+export const statusController = async(req:any,res:Response)=>{
+    res.status(200)
+    res.json({success:true,isAuth:true,status:200})
+}

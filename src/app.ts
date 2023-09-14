@@ -42,7 +42,7 @@ app.use(SESSION({
      store:sessionStore,
 	cookie:{
         secure:true,
-        sameSite:'none',
+        sameSite:'none'
         
     }
 }))
@@ -90,10 +90,6 @@ app.get("/",(req:any,res)=>{
     res.json({success:"true 🕊️",session:req.session,sessionId:req.sessionID})
 })
 
-app.get("/profile",enableAuthenticate,(req,res)=>{
-    res.status(200)
-    res.json({success:"ok through"})
-})
 
 app.use('*',(req,res)=>{
     console.log(req.originalUrl,"*")
