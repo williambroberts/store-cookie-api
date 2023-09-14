@@ -16,6 +16,7 @@ exports.suggestProductController = exports.subscribeController = void 0;
 const Errors_1 = require("../utils/Errors");
 const express_async_handler_1 = __importDefault(require("express-async-handler"));
 const config_1 = __importDefault(require("../db/config"));
+const origins = ["http://localhost:3000", "https://ninjafront.vercel.app", "https://store-five-xi.vercel.app"];
 exports.subscribeController = (0, express_async_handler_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     //query db add email to the store_emails table
     let { email } = req.matchedData;
@@ -25,11 +26,22 @@ exports.subscribeController = (0, express_async_handler_1.default)((req, res) =>
     VALUES (?);
     `, [email]);
     if (result) {
-        res.status(200);
-        res.json({
-            success: true,
-            email: email
-        });
+        //todo check origins and other headers
+        const reqOrigin = req.get('origin');
+        if (origins.includes(reqOrigin)) {
+            res.header('Access-Control-Allow-Origin');
+            res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+            res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+            res.header('Access-Control-Allow-Credentials', 'true');
+            res.status(200);
+            res.json({
+                success: true,
+                email: email
+            });
+        }
+        else {
+            throw new Errors_1.BadRequestError("origin not allowed");
+        }
     }
     else {
         throw new Errors_1.InternalServerError("Subscription failed");
