@@ -34,15 +34,16 @@ let sessionName = ""
 if (process.env.SESSION_NAME){
     sessionName=process.env.SESSION_NAME
 }
+app.set('trust proxy', 1);
 app.use(SESSION({
     name:sessionName,
     saveUninitialized:false,
-    resave:false,
+    resave:true,
     secret:"3824398",
      store:sessionStore,
 	cookie:{
         
-        secure:false,
+        secure:true,
         sameSite:'none'
         
     }
