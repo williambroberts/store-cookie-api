@@ -80,9 +80,10 @@ exports.loginController = (0, express_async_handler_1.default)((req, res) => __a
     if (!match) {
         throw new Errors_1.BadRequestError("Invalid password");
     }
-    //const sessionToken = req.sessionID
-    //generateAuthCookie(res,sessionToken)
-    // req.session.sessionToken = sessionToken
+    //todo serialize into session
+    if (!req.session.user_id) {
+        req.session.user_id = email;
+    }
     res.status(200);
     res.json({
         success: true, isAuth: true

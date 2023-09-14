@@ -68,7 +68,7 @@ app.use(cors({
     credentials:true
 }))
 
-app.use("/auth",authRouter)
+
 
 //
 app.use((req:any,res:Response,next)=>{
@@ -89,6 +89,8 @@ app.get("/",(req:any,res)=>{
     res.status(200)
     res.json({success:"true 🕊️",session:req.session,sessionId:req.sessionID})
 })
+
+app.use("/auth",authRouter)
 
 
 app.use('*',(req,res)=>{

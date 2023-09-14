@@ -67,7 +67,6 @@ function createApp() {
         origin: ["http://localhost:3000", "https://ninjafront.vercel.app", "https://store-five-xi.vercel.app"],
         credentials: true
     }));
-    app.use("/auth", authRouter_1.default);
     //
     app.use((req, res, next) => {
         let session = req.session;
@@ -86,6 +85,7 @@ function createApp() {
         res.status(200);
         res.json({ success: "true 🕊️", session: req.session, sessionId: req.sessionID });
     });
+    app.use("/auth", authRouter_1.default);
     app.use('*', (req, res) => {
         console.log(req.originalUrl, "*");
         res.status(404);
