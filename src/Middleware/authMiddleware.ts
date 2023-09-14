@@ -41,11 +41,12 @@ export const enableAuthenticate = ash(async(req:any,res:Response,next:NextFuncti
         return next()
       }else {
         // MYSQL id !== cookie !== session
-        throw new UnauthorizedError("Invalid db")
+        // cookie is using old session that was deleted from db and isnt current session id
+        throw new UnauthorizedError("Invalid cookie .")
       }
       
      }else {
-      throw new UnauthorizedError("Invalid cookie")
+      throw new UnauthorizedError("Invalid cookie _")
      }
      
 

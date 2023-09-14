@@ -50,11 +50,12 @@ exports.enableAuthenticate = (0, express_async_handler_1.default)((req, res, nex
             }
             else {
                 // MYSQL id !== cookie !== session
-                throw new Errors_1.UnauthorizedError("Invalid db");
+                // cookie is using old session that was deleted from db and isnt current session id
+                throw new Errors_1.UnauthorizedError("Invalid cookie .");
             }
         }
         else {
-            throw new Errors_1.UnauthorizedError("Invalid cookie");
+            throw new Errors_1.UnauthorizedError("Invalid cookie _");
         }
     }
     throw new Errors_1.InternalServerError("Session name error");
