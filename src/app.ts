@@ -11,6 +11,7 @@ import cookieParser from "cookie-parser"
 import { errorHandler } from "./Middleware/errorMiddleware"
 import bodyParser from "body-parser"
 import { enableAuthenticate } from "./Middleware/authMiddleware"
+import storeRouter from "./Routers/storeRouter"
 function createApp(){
     const app = express()
     const MySQLStore = MySQLSessionStore(SESSION)
@@ -93,7 +94,7 @@ app.get("/",(req:any,res)=>{
 })
 
 app.use("/auth",authRouter)
-
+app.use("/store",storeRouter)
 
 app.use('*',(req,res)=>{
     console.log(req.originalUrl,"*")
