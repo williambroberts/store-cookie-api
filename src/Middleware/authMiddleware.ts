@@ -2,6 +2,8 @@ import { NextFunction, Request, Response } from "express"
 import { ForbiddenError, InternalServerError, UnauthorizedError } from "../utils/Errors"
 import ash from "express-async-handler"
 import pool from "../db/config"
+
+// validate session-id db-id cookie-id (session has final say > db > cookie)
 export const enableAuthenticate = ash(async(req:any,res:Response,next:NextFunction)=>{
   // check cookie and session store
   if (!req.cookies){
@@ -34,8 +36,14 @@ export const enableAuthenticate = ash(async(req:any,res:Response,next:NextFuncti
      
      //console.log(row)
      if (row?.session_id===idFromCookie){
-      //console.log(row.session_id)
-      return next()
+      console.log(row.session_id,req.sessionID,"🕊️")
+      if (row?.session_id===req.sessionID){
+        return next()
+      }else {
+        // MYSQL id !== cookie !== session
+        throw new UnauthorizedError("Invalid db")
+      }
+      
      }else {
       throw new UnauthorizedError("Invalid cookie")
      }

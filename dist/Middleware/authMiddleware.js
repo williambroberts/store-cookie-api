@@ -16,6 +16,7 @@ exports.enableAuthenticate = void 0;
 const Errors_1 = require("../utils/Errors");
 const express_async_handler_1 = __importDefault(require("express-async-handler"));
 const config_1 = __importDefault(require("../db/config"));
+// validate session-id db-id cookie-id (session has final say > db > cookie)
 exports.enableAuthenticate = (0, express_async_handler_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     // check cookie and session store
     if (!req.cookies) {
@@ -43,8 +44,14 @@ exports.enableAuthenticate = (0, express_async_handler_1.default)((req, res, nex
         let row = result[0];
         //console.log(row)
         if ((row === null || row === void 0 ? void 0 : row.session_id) === idFromCookie) {
-            //console.log(row.session_id)
-            return next();
+            console.log(row.session_id, req.sessionID, "🕊️");
+            if ((row === null || row === void 0 ? void 0 : row.session_id) === req.sessionID) {
+                return next();
+            }
+            else {
+                // MYSQL id !== cookie !== session
+                throw new Errors_1.UnauthorizedError("Invalid db");
+            }
         }
         else {
             throw new Errors_1.UnauthorizedError("Invalid cookie");

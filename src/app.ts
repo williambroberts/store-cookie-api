@@ -76,10 +76,10 @@ app.use((req:any,res:Response,next)=>{
     
     let session = req.session
     let sessionID = req.sessionID
-    console.log(sessionID,req.session.viewCount)
+    //console.log(sessionID,req.session.viewCount)
     if (!req.session.viewCount){
         req.session.viewCount =1
-        console.log(req.session.viewCount)
+        //console.log(req.session.viewCount)
     }else {
         req.session.viewCount++
     }

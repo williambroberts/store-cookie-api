@@ -89,15 +89,24 @@ export const logoutController = ash(async(req:any,res:Response)=>{
     }
     if (process.env.SESSION_NAME){
         let sessionName = process.env.SESSION_NAME
-        res.clearCookie(sessionName)
-        res.clearCookie(authCookie)
-        req.session.destroy(function(err:Error){
-            if(err){
-                throw new InternalServerError("Error destroying session")
-            }
-            res.status(200)
-            res.json({success:true,isAuth:false,status:200})
-        })
+        let [result]= await pool.query(`
+        delete from sessions where session_id = ?
+        `,[req.sessionID])
+        console.log(result,".🕊️")
+        if (result){
+            res.clearCookie(sessionName)
+            res.clearCookie(authCookie)
+            req.session.destroy(function(err:Error){
+                if(err){
+                    throw new InternalServerError("Error destroying session")
+                }
+                res.status(200)
+                res.json({success:true,isAuth:false,status:200})
+            })
+        }else {
+            throw new InternalServerError("Session doesnt exist")
+        }
+        
         
     }
     

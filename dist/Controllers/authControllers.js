@@ -98,15 +98,24 @@ exports.logoutController = (0, express_async_handler_1.default)((req, res) => __
     }
     if (process.env.SESSION_NAME) {
         let sessionName = process.env.SESSION_NAME;
-        res.clearCookie(sessionName);
-        res.clearCookie(authCookie);
-        req.session.destroy(function (err) {
-            if (err) {
-                throw new Errors_1.InternalServerError("Error destroying session");
-            }
-            res.status(200);
-            res.json({ success: true, isAuth: false, status: 200 });
-        });
+        let [result] = yield config_1.default.query(`
+        delete from sessions where session_id = ?
+        `, [req.sessionID]);
+        console.log(result, ".🕊️");
+        if (result) {
+            res.clearCookie(sessionName);
+            res.clearCookie(authCookie);
+            req.session.destroy(function (err) {
+                if (err) {
+                    throw new Errors_1.InternalServerError("Error destroying session");
+                }
+                res.status(200);
+                res.json({ success: true, isAuth: false, status: 200 });
+            });
+        }
+        else {
+            throw new Errors_1.InternalServerError("Session doesnt exist");
+        }
     }
 }));
 const statusController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
