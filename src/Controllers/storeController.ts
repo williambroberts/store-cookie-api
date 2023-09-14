@@ -16,7 +16,7 @@ export const subscribeController = ash(async(req:any,res:Response)=>{
         //todo check origins and other headers
         const reqOrigin = req.get('origin')
         if (origins.includes(reqOrigin)){
-            res.header('Access-Control-Allow-Origin',)
+            res.header('Access-Control-Allow-Origin',reqOrigin)
             res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE')
             res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
             res.header('Access-Control-Allow-Credentials', 'true');
