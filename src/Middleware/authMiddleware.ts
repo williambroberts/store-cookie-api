@@ -9,17 +9,18 @@ export const enableAuthenticate = ash(async(req:any,res:Response,next:NextFuncti
   }
   let cookies = req.cookies
   
-  let sessionCookie = ""
-  if (process.env.SESSION_NAME){
-     sessionCookie = cookies['sessionToken']
-     if (!sessionCookie){
+  
+  if (process.env.AUTH_COOKIE){
+      let authCookie = process.env.AUTH_COOKIE
+     authCookie = cookies[authCookie]
+     if (!authCookie){
       // todo change to ok response to hide mechanism of protect route
-      throw new UnauthorizedError("No cookie with session name")
+      throw new UnauthorizedError("No auth cookie")
      }
      //get sessionid from cookie 
      
      //let idFromCookie = sessionCookie.split(":")[1].split(".")[0]
-     let idFromCookie = sessionCookie
+     let idFromCookie = authCookie
      //console.log(idFromCookie,cookies)
      const [result]=await pool.query(`
      select distinct * from sessions

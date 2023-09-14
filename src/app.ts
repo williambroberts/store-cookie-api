@@ -42,7 +42,7 @@ app.use(SESSION({
      store:sessionStore,
 	cookie:{
         
-        secure:true,
+        secure:false,
         sameSite:'none'
         
     }

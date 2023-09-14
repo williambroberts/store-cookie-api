@@ -43,7 +43,7 @@ function createApp() {
         secret: "3824398",
         store: sessionStore,
         cookie: {
-            secure: true,
+            secure: false,
             sameSite: 'none'
         }
     }));

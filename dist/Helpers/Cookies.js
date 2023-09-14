@@ -10,10 +10,17 @@ const generateAuthCookie = (res, sessionToken) => {
     let extra = now + (60 * 60 * 1000);
     const expiresAt = new Date(extra); //1 hour
     console.log(expiresAt, now);
-    res.cookie('sessionToken', sessionToken, {
-        sameSite: "none",
-        secure: true,
-        httpOnly: true,
-    });
+    let authCookie = "";
+    if (process.env.AUTH_COOKIE) {
+        authCookie = process.env.AUTH_COOKIE;
+        res.cookie(authCookie, sessionToken, {
+            sameSite: "none",
+            secure: true,
+            httpOnly: true,
+        });
+    }
+    else {
+        throw new Errors_1.InternalServerError("Cannot access auth cookie name");
+    }
 };
 exports.generateAuthCookie = generateAuthCookie;

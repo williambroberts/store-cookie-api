@@ -22,16 +22,16 @@ exports.enableAuthenticate = (0, express_async_handler_1.default)((req, res, nex
         throw new Errors_1.UnauthorizedError("No cookies sent with request");
     }
     let cookies = req.cookies;
-    let sessionCookie = "";
-    if (process.env.SESSION_NAME) {
-        sessionCookie = cookies['sessionToken'];
-        if (!sessionCookie) {
+    if (process.env.AUTH_COOKIE) {
+        let authCookie = process.env.AUTH_COOKIE;
+        authCookie = cookies[authCookie];
+        if (!authCookie) {
             // todo change to ok response to hide mechanism of protect route
-            throw new Errors_1.UnauthorizedError("No cookie with session name");
+            throw new Errors_1.UnauthorizedError("No auth cookie");
         }
         //get sessionid from cookie 
         //let idFromCookie = sessionCookie.split(":")[1].split(".")[0]
-        let idFromCookie = sessionCookie;
+        let idFromCookie = authCookie;
         //console.log(idFromCookie,cookies)
         const [result] = yield config_1.default.query(`
      select distinct * from sessions

@@ -83,14 +83,14 @@ export const loginController = ash(async(req:any,res:Response)=>{
 })
 
 export const logoutController = ash(async(req:any,res:Response)=>{
-    // if cookie and correct in del session/destroy
-    // check cookie
-    // validate cookie vs sessionstore
-    // destory cookie + session
+    let authCookie = ""
+    if (process.env.AUTH_COOKIE){
+        authCookie = process.env.AUTH_COOKIE
+    }
     if (process.env.SESSION_NAME){
         let sessionName = process.env.SESSION_NAME
         res.clearCookie(sessionName)
-        res.clearCookie('sessionToken')
+        res.clearCookie(authCookie)
         req.session.destroy(function(err:Error){
             if(err){
                 throw new InternalServerError("Error destroying session")
