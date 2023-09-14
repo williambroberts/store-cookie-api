@@ -41,6 +41,7 @@ app.use(SESSION({
     secret:"3824398",
      store:sessionStore,
 	cookie:{
+        
         secure:true,
         sameSite:'none'
         

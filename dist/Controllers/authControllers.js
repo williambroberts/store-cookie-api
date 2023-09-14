@@ -17,6 +17,7 @@ const express_async_handler_1 = __importDefault(require("express-async-handler")
 const Errors_1 = require("../utils/Errors");
 const config_1 = __importDefault(require("../db/config"));
 const passwords_1 = require("../Helpers/passwords");
+const Cookies_1 = require("../Helpers/Cookies");
 exports.registerController = (0, express_async_handler_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { email, password } = req.matchedData;
     if (!email) {
@@ -84,6 +85,7 @@ exports.loginController = (0, express_async_handler_1.default)((req, res) => __a
     if (!req.session.user_id) {
         req.session.user_id = email;
     }
+    (0, Cookies_1.generateAuthCookie)(res, req.sessionID);
     res.status(200);
     res.json({
         success: true, isAuth: true
@@ -97,6 +99,7 @@ exports.logoutController = (0, express_async_handler_1.default)((req, res) => __
     if (process.env.SESSION_NAME) {
         let sessionName = process.env.SESSION_NAME;
         res.clearCookie(sessionName);
+        res.clearCookie('sessionToken');
         req.session.destroy(function (err) {
             if (err) {
                 throw new Errors_1.InternalServerError("Error destroying session");

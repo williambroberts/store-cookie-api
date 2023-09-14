@@ -3,6 +3,7 @@ import ash from "express-async-handler"
 import { BadRequestError, ConflictError, InternalServerError } from "../utils/Errors"
 import pool from "../db/config"
 import { comparePassword, hashPassword } from "../Helpers/passwords"
+import { generateAuthCookie } from "../Helpers/Cookies"
 
 
 export const registerController = ash(async(req:any,res:Response)=>{
@@ -74,6 +75,7 @@ export const loginController = ash(async(req:any,res:Response)=>{
     if (!req.session.user_id){
         req.session.user_id=email
     }
+    generateAuthCookie(res,req.sessionID)
     res.status(200)
     res.json({
         success:true,isAuth:true
@@ -88,6 +90,7 @@ export const logoutController = ash(async(req:any,res:Response)=>{
     if (process.env.SESSION_NAME){
         let sessionName = process.env.SESSION_NAME
         res.clearCookie(sessionName)
+        res.clearCookie('sessionToken')
         req.session.destroy(function(err:Error){
             if(err){
                 throw new InternalServerError("Error destroying session")

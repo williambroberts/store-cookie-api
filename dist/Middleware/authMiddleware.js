@@ -24,22 +24,26 @@ exports.enableAuthenticate = (0, express_async_handler_1.default)((req, res, nex
     let cookies = req.cookies;
     let sessionCookie = "";
     if (process.env.SESSION_NAME) {
-        sessionCookie = cookies[process.env.SESSION_NAME];
+        sessionCookie = cookies['sessionToken'];
         if (!sessionCookie) {
             // todo change to ok response to hide mechanism of protect route
             throw new Errors_1.UnauthorizedError("No cookie with session name");
         }
         //get sessionid from cookie 
-        let idFromCookie = sessionCookie.split(":")[1].split(".")[0];
-        console.log(idFromCookie);
+        //let idFromCookie = sessionCookie.split(":")[1].split(".")[0]
+        let idFromCookie = sessionCookie;
+        //console.log(idFromCookie,cookies)
         const [result] = yield config_1.default.query(`
      select distinct * from sessions
      where session_id = ?
      `, [idFromCookie]);
+        if (result.length === 0) {
+            throw new Errors_1.UnauthorizedError("Invalid cookie");
+        }
         let row = result[0];
-        console.log(row);
-        if (row.session_id === idFromCookie) {
-            console.log(row.session_id);
+        //console.log(row)
+        if ((row === null || row === void 0 ? void 0 : row.session_id) === idFromCookie) {
+            //console.log(row.session_id)
             return next();
         }
         else {
