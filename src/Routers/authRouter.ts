@@ -9,5 +9,7 @@ const authRouter = express.Router()
 authRouter.post("/login",loginVS,valitatorVS,loginController)
 authRouter.post("/logout",logoutController)
 
+
+// protected test if really auth validate cookie
 authRouter.get("/status",enableAuthenticate,statusController)
 export default authRouter

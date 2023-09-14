@@ -88,7 +88,7 @@ exports.loginController = (0, express_async_handler_1.default)((req, res) => __a
     (0, Cookies_1.generateAuthCookie)(res, req.sessionID);
     res.status(200);
     res.json({
-        success: true, isAuth: true
+        success: true, isAuth: true, status: 200
     });
 }));
 exports.logoutController = (0, express_async_handler_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -105,7 +105,7 @@ exports.logoutController = (0, express_async_handler_1.default)((req, res) => __
                 throw new Errors_1.InternalServerError("Error destroying session");
             }
             res.status(200);
-            res.json({ success: true });
+            res.json({ success: true, isAuth: false, status: 200 });
         });
     }
 }));

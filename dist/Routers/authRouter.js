@@ -10,5 +10,6 @@ const authMiddleware_1 = require("../Middleware/authMiddleware");
 const authRouter = express_1.default.Router();
 authRouter.post("/login", Validators_1.loginVS, Validators_1.valitatorVS, authControllers_1.loginController);
 authRouter.post("/logout", authControllers_1.logoutController);
+// protected test if really auth validate cookie
 authRouter.get("/status", authMiddleware_1.enableAuthenticate, authControllers_1.statusController);
 exports.default = authRouter;

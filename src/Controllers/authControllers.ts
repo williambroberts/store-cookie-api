@@ -78,7 +78,7 @@ export const loginController = ash(async(req:any,res:Response)=>{
     generateAuthCookie(res,req.sessionID)
     res.status(200)
     res.json({
-        success:true,isAuth:true
+        success:true,isAuth:true,status:200
     })
 })
 
@@ -96,7 +96,7 @@ export const logoutController = ash(async(req:any,res:Response)=>{
                 throw new InternalServerError("Error destroying session")
             }
             res.status(200)
-            res.json({success:true})
+            res.json({success:true,isAuth:false,status:200})
         })
         
     }
