@@ -4,6 +4,7 @@ import MySQLSessionStore  from "express-mysql-session"
 import pool from "./db/config"
 import authRouter from "./Routers/authRouter"
 let SESSION:any = session
+import cors from "cors"
 import compression from "compression"
 import helmet from "helmet"
 import cookieParser from "cookie-parser"
@@ -62,7 +63,10 @@ sessionStore.close().then(() => {
 
 app.use(compression())
 app.use(helmet())
-
+app.use(cors({
+    origin:["http://localhost:3000","https://ninjafront.vercel.app","https://store-five-xi.vercel.app"],
+    credentials:true
+}))
 
 app.use("/auth",authRouter)
 

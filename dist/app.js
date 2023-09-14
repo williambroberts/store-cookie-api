@@ -9,6 +9,7 @@ const express_mysql_session_1 = __importDefault(require("express-mysql-session")
 const config_1 = __importDefault(require("./db/config"));
 const authRouter_1 = __importDefault(require("./Routers/authRouter"));
 let SESSION = express_session_1.default;
+const cors_1 = __importDefault(require("cors"));
 const compression_1 = __importDefault(require("compression"));
 const helmet_1 = __importDefault(require("helmet"));
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
@@ -43,7 +44,7 @@ function createApp() {
         secret: "3824398",
         store: sessionStore,
         cookie: {
-            secure: false,
+            secure: true,
             sameSite: 'none',
         }
     }));
@@ -63,6 +64,10 @@ function createApp() {
     });
     app.use((0, compression_1.default)());
     app.use((0, helmet_1.default)());
+    app.use((0, cors_1.default)({
+        origin: ["http://localhost:3000", "https://ninjafront.vercel.app", "https://store-five-xi.vercel.app"],
+        credentials: true
+    }));
     app.use("/auth", authRouter_1.default);
     //
     app.use((req, res, next) => {

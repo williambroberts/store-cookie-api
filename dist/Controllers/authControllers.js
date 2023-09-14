@@ -12,11 +12,44 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.logoutController = exports.loginController = void 0;
+exports.logoutController = exports.loginController = exports.registerController = void 0;
 const express_async_handler_1 = __importDefault(require("express-async-handler"));
 const Errors_1 = require("../utils/Errors");
 const config_1 = __importDefault(require("../db/config"));
 const passwords_1 = require("../Helpers/passwords");
+exports.registerController = (0, express_async_handler_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { email, password } = req.matchedData;
+    if (!email) {
+        throw new Errors_1.BadRequestError("Email required");
+    }
+    if (!password) {
+        throw new Errors_1.BadRequestError("Password required");
+    }
+    const [result] = yield config_1.default.query(`
+    SELECT DISTINCT * FROM store_users
+    WHERE email = ?
+    LIMIT 1;
+    `, [email]);
+    if (result.length !== 0) {
+        throw new Errors_1.ConflictError("Email in use already");
+    }
+    const hash = (0, passwords_1.hashPassword)(password);
+    //save to db
+    if (hash) {
+        const [row] = yield config_1.default.query(`
+        insert into store_users (email,password)
+        values (?, ?)
+        `, [email, hash]);
+        console.log(row);
+        if (row) {
+            res.status(201);
+            res.json({ success: true, row: row });
+        }
+    }
+    else {
+        throw new Errors_1.InternalServerError("Failed to hash password");
+    }
+}));
 exports.loginController = (0, express_async_handler_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { email, password } = req.matchedData;
     console.log(email, password);

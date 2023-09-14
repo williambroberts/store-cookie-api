@@ -1,9 +1,43 @@
 import { Response,Request } from "express"
 import ash from "express-async-handler"
-import { BadRequestError, InternalServerError } from "../utils/Errors"
+import { BadRequestError, ConflictError, InternalServerError } from "../utils/Errors"
 import pool from "../db/config"
-import { comparePassword } from "../Helpers/passwords"
-import { generateAuthCookie } from "../Helpers/Cookies"
+import { comparePassword, hashPassword } from "../Helpers/passwords"
+
+
+export const registerController = ash(async(req:any,res:Response)=>{
+    const {email,password}=req.matchedData
+    if (!email){
+        throw new BadRequestError("Email required")
+    }
+    if (!password){
+        throw new BadRequestError("Password required")
+    }
+    const [result] = await pool.query(`
+    SELECT DISTINCT * FROM store_users
+    WHERE email = ?
+    LIMIT 1;
+    `,[email])
+    if (result.length!==0){
+        throw new ConflictError("Email in use already")
+    }
+    const hash = hashPassword(password)
+    //save to db
+    if (hash){
+        const [row] =await pool.query(`
+        insert into store_users (email,password)
+        values (?, ?)
+        `,[email,hash])
+        console.log(row)
+        if (row){
+            res.status(201)
+            res.json({success:true,row:row})
+        }
+    }else {
+        throw new InternalServerError("Failed to hash password")
+    }
+    
+})
 
 export const loginController = ash(async(req:any,res:Response)=>{
     const {email,password}=req.matchedData
