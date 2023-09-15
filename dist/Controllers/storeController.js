@@ -28,11 +28,11 @@ exports.subscribeController = (0, express_async_handler_1.default)((req, res) =>
     if (result) {
         //todo check origins and other headers
         const reqOrigin = req.get('origin');
-        if (origins.includes(reqOrigin)) {
-            res.header('Access-Control-Allow-Origin');
-            res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
-            res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
-            res.header('Access-Control-Allow-Credentials', 'true');
+        if (true) {
+            // res.header('Access-Control-Allow-Origin',reqOrigin)
+            // res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE')
+            // res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+            // res.header('Access-Control-Allow-Credentials', 'true');
             res.status(200);
             res.json({
                 success: true,
