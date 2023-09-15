@@ -10,7 +10,7 @@ import helmet from "helmet"
 import cookieParser from "cookie-parser"
 import { errorHandler } from "./Middleware/errorMiddleware"
 import bodyParser from "body-parser"
-import { enableAuthenticate } from "./Middleware/authMiddleware"
+
 import storeRouter from "./Routers/storeRouter"
 function createApp(){
     const app = express()
